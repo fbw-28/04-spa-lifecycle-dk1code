@@ -15,7 +15,8 @@ export default class SearchResults extends Component {
   }
 
   filterUsers = (users) =>
-    users.filter((user) => 
+    users.filter(
+      (user) =>
         user.name.toLowerCase().includes(this.props.searchFor.toLowerCase()) ||
         user.email.toLowerCase().includes(this.props.searchFor.toLowerCase())
     );
@@ -46,5 +47,13 @@ export default class SearchResults extends Component {
         </table>
       </div>
     );
+  }
+
+  shouldComponentUpdate(nextProp) {
+    if (nextProp !== this.props) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
