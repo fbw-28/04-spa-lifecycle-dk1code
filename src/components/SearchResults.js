@@ -3,30 +3,35 @@ import React, { Component } from "react";
 import "./SearchResults.css";
 
 import User from "./User";
-// import MappingState from "../func/mappingState";
 
 export default class SearchResults extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       users: [],
+      // filderedUsers: [],
     };
   }
+
+  filterUsers = (users) =>
+    users.filter((user) => 
+        user.name.toLowerCase().includes(this.props.searchFor.toLowerCase()) ||
+        user.email.toLowerCase().includes(this.props.searchFor.toLowerCase())
+    );
 
   componentDidMount() {
     fetch("https://jsonplaceholder.typicode.com/users")
       .then((data) => data.json())
       .then((data) =>
-        this.setState(
-          {
-            users: data,
-          },
-          () => console.log(this.state.users)
-        )
+        this.setState({
+          users: data,
+        })
       );
   }
 
   render() {
+    let filderedUsers = this.filterUsers(this.state.users);
     return (
       <div>
         <table>
@@ -37,10 +42,7 @@ export default class SearchResults extends Component {
               <td>eMail</td>
             </tr>
           </thead>
-          <tbody>
-            {this.state.users.map((props) => User(props))}
-            {/* <MappingState obj={this.state.users} /> */}
-          </tbody>
+          <User filderedUsers={filderedUsers} />
         </table>
       </div>
     );
