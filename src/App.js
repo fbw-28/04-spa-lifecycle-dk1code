@@ -5,6 +5,7 @@ import "./main.css";
 
 import Header from "./components/Header";
 import SearchResults from "./components/SearchResults";
+import About from "./components/About";
 
 export default class App extends Component {
   constructor(props) {
@@ -13,6 +14,7 @@ export default class App extends Component {
     this.state = {
       searchTerm: "",
       lastSearchTerm: "",
+      currentPage: "search",
     };
   }
 
@@ -29,20 +31,26 @@ export default class App extends Component {
     });
   };
 
-  componentDidMount() {
-    fetch("https://jsonplaceholder.typicode.com/users")
-      .then((data) => data.json())
-      .then((data) =>
-        this.setState({
-          users: data,
-        })
-      );
-  }
+  switchToSearch = (e) => {
+    e.preventDefault();
+    this.setState({ currentPage: "search" });
+  };
+
+  switchToAbout = (e) => {
+    e.preventDefault();
+    this.setState({ currentPage: "about" });
+  };
+
+  switchPage = (page) => {
+    this.setState({
+      currentPage: page,
+    });
+  };
 
   render() {
     return (
       <div>
-        <Header />
+        <Header switchPage={this.switchPage} />
         <form>
           <input
             type="text"
@@ -52,9 +60,10 @@ export default class App extends Component {
           <button onClick={this.setLastInput}>Search</button>
         </form>
         <SearchResults
-          users={this.state.users}
-          searchFor={this.state.lastSearchTerm}
-        />
+            users={this.state.users}
+            searchFor={this.state.lastSearchTerm}
+          />
+        <About />
       </div>
     );
   }
